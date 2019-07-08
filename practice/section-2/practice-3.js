@@ -1,62 +1,42 @@
 'use strict';
 
 function countSameElements(collection) {
-  var str = []; //字符数组
-  var num = []; //对应数量
-  //更新两个数组
-  function update(tempStr,tempNum){
-    if(str.indexOf(tempStr)===-1)
-    {
-      str.push(tempStr);
-      num.push(tempNum);
-    }
-    else
-    {
-      var index = str.indexOf(tempStr);
-      num[index]=num[index]+tempNum;
+  var result=new Array();
+  var r = /^\+?[1-9][0-9]*$/;　　//正整数s
+  var count=0;
+  var backup=collection.concat();
+  for (var i = 0; i <collection.length ; i++) {
+    if(collection[i].length!=1){
+      collection[i]=collection[i].substring(0,1);
+      console.log(collection[i]);
+      backup[i]=parseInt(backup[i].match(/\d+/g));
+      console.log(backup[i]);
     }
   }
-  //遍历原集合
-  collection.forEach(function (value) {
-    //单字符
-    if(value.length===1)
-    {
-      update(value,1)
+
+
+  for (var i=0;i<collection.length;i++){
+    if(r.test(backup[i])){
+      count=backup[i];
+    }else{
+      count=1;
     }
-    else
-    {
-      var tempStr = '';
-      var tempNum = 0;
-      //a[2]形式
-      if(value.indexOf('[')!==-1)
-      {
-        tempStr = value.substring(0,value.indexOf('['));
-        tempNum = parseInt(value.substring(value.indexOf('[')+1, value.indexOf(']')));
+    while(collection[i]==collection[i+1]&&i<collection.length-1){
+      if(r.test(backup[i+1])){
+        count+=backup[i+1];
+      }else{
+      count++;
       }
-      //a-2形式
-      if(value.indexOf('-')!==-1)
-      {
-        tempStr = value.substring(0,value.indexOf('-'));
-        tempNum = parseInt(value.substring(value.indexOf('-')+1));
-      }
-      //a:2形式
-      if(value.indexOf(':')!==-1)
-      {
-        tempStr = value.substring(0,value.indexOf(':'));
-        tempNum = parseInt(value.substring(value.indexOf(':')+1));
-      }
-      update(tempStr,tempNum)
+      i++;
     }
-  });
-  //保存为对象数组
-  var result = [];
-  for(var i=0;i<str.length;i++)
-  {
-    result.push({
-      name:str[i],
-      summary:num[i]
-    })
+    var temp=new Object();
+    temp.name=collection[i];
+    temp.summary=count;
+    console.log(temp);
+    result.push(temp);
+    count
   }
   console.log(result);
   return result;
+
 }
